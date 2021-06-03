@@ -2,7 +2,7 @@ import React from 'react';
 import { StatusBar } from 'react-native';
 
 import * as S from './styles';
-import { BackButton } from '../../components';
+import { BackButton, Button, Calendar } from '../../components';
 import ArrowSvg from '../../assets/arrow.svg';
 
 function Scheduling() {
@@ -35,6 +35,14 @@ function Scheduling() {
           </S.DateInfo>
         </S.RentalPeriod>
       </S.Header>
+
+      <S.Content>
+        <Calendar />
+      </S.Content>
+
+      <S.Footer>
+        <Button title="Confirmar" />
+      </S.Footer>
     </S.Container>
   );
 }
