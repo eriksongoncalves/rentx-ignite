@@ -1,11 +1,18 @@
 import React from 'react';
 import { StatusBar } from 'react-native';
+import { useNavigation } from '@react-navigation/native';
 
 import * as S from './styles';
 import { BackButton, Button, Calendar } from '../../components';
 import ArrowSvg from '../../assets/arrow.svg';
 
 function Scheduling() {
+  const navigation = useNavigation();
+
+  function handleConfirm() {
+    navigation.navigate('SchedulingDetail');
+  }
+
   return (
     <S.Container>
       <StatusBar
@@ -41,7 +48,7 @@ function Scheduling() {
       </S.Content>
 
       <S.Footer>
-        <Button title="Confirmar" />
+        <Button title="Confirmar" onPress={handleConfirm} />
       </S.Footer>
     </S.Container>
   );

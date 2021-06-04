@@ -1,13 +1,19 @@
 import React from 'react';
 import { StatusBar } from 'react-native';
 import { RFValue } from 'react-native-responsive-fontsize';
+import { useNavigation } from '@react-navigation/native';
 
+import * as S from './styles';
 import Logo from '../../assets/logo.svg';
 import { CardCar } from '../../components';
 
-import * as S from './styles';
-
 function Home() {
+  const navigation = useNavigation();
+
+  function handleCarDetail() {
+    navigation.navigate('Detail');
+  }
+
   return (
     <S.Container>
       <StatusBar
@@ -34,6 +40,7 @@ function Home() {
               thumbnail:
                 'https://e7.pngegg.com/pngimages/889/380/png-clipart-audi-sportback-concept-car-audi-a3-2018-audi-a5-coupe-audi-compact-car-sedan.png'
             }}
+            onPress={handleCarDetail}
           />
         )}
       />

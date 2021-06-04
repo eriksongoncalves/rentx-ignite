@@ -2,6 +2,7 @@ import React from 'react';
 import { Feather } from '@expo/vector-icons';
 import { useTheme } from 'styled-components';
 import { RFValue } from 'react-native-responsive-fontsize';
+import { useNavigation } from '@react-navigation/native';
 
 import { BackButton, ImageSlider, Accessory, Button } from '../../components';
 import speedSvg from '../../assets/speed.svg';
@@ -15,6 +16,11 @@ import * as S from './styles';
 
 function SchedulingDetail() {
   const theme = useTheme();
+  const navigation = useNavigation();
+
+  function handleConfirm() {
+    navigation.navigate('SchedulingComplete');
+  }
 
   return (
     <S.Container>
@@ -87,7 +93,11 @@ function SchedulingDetail() {
       </S.Content>
 
       <S.Footer>
-        <Button title="Confirmar" />
+        <Button
+          title="Alugar agora"
+          color={theme.colors.success}
+          onPress={handleConfirm}
+        />
       </S.Footer>
     </S.Container>
   );

@@ -1,5 +1,6 @@
 import React from 'react';
 import { BackButton, ImageSlider, Accessory, Button } from '../../components';
+import { useNavigation } from '@react-navigation/native';
 
 import speedSvg from '../../assets/speed.svg';
 import accelerationSvg from '../../assets/acceleration.svg';
@@ -11,6 +12,12 @@ import peopleSvg from '../../assets/people.svg';
 import * as S from './styles';
 
 function Detail() {
+  const navigation = useNavigation();
+
+  function handleConfirm() {
+    navigation.navigate('Scheduling');
+  }
+
   return (
     <S.Container>
       <S.Header>
@@ -55,7 +62,7 @@ function Detail() {
       </S.Content>
 
       <S.Footer>
-        <Button title="Confirmar" />
+        <Button title="Escolher período do aluguel" onPress={handleConfirm} />
       </S.Footer>
     </S.Container>
   );
