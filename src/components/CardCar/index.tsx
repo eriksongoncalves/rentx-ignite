@@ -5,12 +5,15 @@ import * as S from './styles';
 
 import GasolineSvg from '../../assets/gasoline.svg';
 import { ICarDTO } from '../../dtos/CarDTO';
+import { getAccessoryIcon } from '../../utils/getAccessoryIcon';
+
 
 type CardCarProps = {
   data: ICarDTO;
 } & RectButtonProps;
 
 function CardCar({ data, ...rest }: CardCarProps) {
+  const MotorIcon = getAccessoryIcon(data.fuel_type);
   return (
     <S.Container {...rest}>
       <S.Detail>
@@ -24,7 +27,7 @@ function CardCar({ data, ...rest }: CardCarProps) {
           </S.Rent>
 
           <S.Type>
-            <GasolineSvg />
+            <MotorIcon />
           </S.Type>
         </S.About>
       </S.Detail>

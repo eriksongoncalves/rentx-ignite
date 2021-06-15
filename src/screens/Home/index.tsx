@@ -29,8 +29,8 @@ function Home() {
       });
   }, []);
 
-  function handleCarDetail() {
-    navigation.navigate('Detail');
+  function handleCarDetail(car: ICarDTO) {
+    navigation.navigate('Detail', { car });
   }
 
   return (
@@ -54,7 +54,7 @@ function Home() {
           data={cars}
           keyExtractor={item => item.id}
           renderItem={({ item }) => (
-            <CardCar data={item} onPress={handleCarDetail} />
+            <CardCar data={item} onPress={() => handleCarDetail(item)} />
           )}
         />
       )}
