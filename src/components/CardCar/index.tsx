@@ -4,19 +4,10 @@ import { RectButtonProps } from 'react-native-gesture-handler';
 import * as S from './styles';
 
 import GasolineSvg from '../../assets/gasoline.svg';
-
-type CarData = {
-  brand: string;
-  name: string;
-  rent: {
-    period: string;
-    price: number;
-  };
-  thumbnail: string;
-};
+import { ICarDTO } from '../../dtos/CarDTO';
 
 type CardCarProps = {
-  data: CarData;
+  data: ICarDTO;
 } & RectButtonProps;
 
 function CardCar({ data, ...rest }: CardCarProps) {

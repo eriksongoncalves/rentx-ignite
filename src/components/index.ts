@@ -5,3 +5,4 @@ export { default as Calendar } from './Calendar';
 export { default as CardCar } from './CardCar';
 export { default as ConfirmButton } from './ConfirmButton';
 export { default as ImageSlider } from './ImageSlider';
+export { default as Loading } from './Loading';

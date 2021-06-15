@@ -1,14 +1,33 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { StatusBar } from 'react-native';
 import { RFValue } from 'react-native-responsive-fontsize';
 import { useNavigation } from '@react-navigation/native';
 
 import * as S from './styles';
 import Logo from '../../assets/logo.svg';
-import { CardCar } from '../../components';
+import api from '../../services/api';
+import { ICarDTO } from '../../dtos/CarDTO';
+import { CardCar, Loading } from '../../components';
 
 function Home() {
   const navigation = useNavigation();
+  const [cars, setCars] = useState<ICarDTO[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    api
+      .get<ICarDTO[]>('/cars')
+      .then(response => {
+        setCars(response.data);
+      })
+      .catch(error => {
+        // eslint-disable-next-line no-console
+        console.error(error);
+      })
+      .finally(() => {
+        setLoading(false);
+      });
+  }, []);
 
   function handleCarDetail() {
     navigation.navigate('Detail');
@@ -28,22 +47,17 @@ function Home() {
         </S.HeaderContent>
       </S.Header>
 
-      <S.CardList
-        data={[1, 2, 3, 4, 5, 6]}
-        keyExtractor={item => String(item)}
-        renderItem={() => (
-          <CardCar
-            data={{
-              brand: 'Audi',
-              name: 'RS 5 Coupé',
-              rent: { period: 'Ao dia', price: 120 },
-              thumbnail:
-                'https://e7.pngegg.com/pngimages/889/380/png-clipart-audi-sportback-concept-car-audi-a3-2018-audi-a5-coupe-audi-compact-car-sedan.png'
-            }}
-            onPress={handleCarDetail}
-          />
-        )}
-      />
+      {loading ? (
+        <Loading />
+      ) : (
+        <S.CardList
+          data={cars}
+          keyExtractor={item => item.id}
+          renderItem={({ item }) => (
+            <CardCar data={item} onPress={handleCarDetail} />
+          )}
+        />
+      )}
     </S.Container>
   );
 }
