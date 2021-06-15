@@ -8,20 +8,42 @@
 
 <br />
 
-## Configurações iniciais
+## Configurações
 
 <br />
 
-- Na raiz do projeto instale as dependências:
+Instale o json-server
 
 ```
-  $ yarn install
+yarn add -g json-server
 ```
 
 <br />
 
-## Rode a aplicação:
+Na raiz do projeto instale as dependências:
 
 ```
-  $ yarn start
+yarn install
+```
+
+<br />
+
+## Iniciando a aplicação:
+
+<br />
+
+Altere o arquivo `./src/services/api.ts` com o seu IP.
+
+<br />
+
+**Servidor**
+
+```
+yarn api
+```
+
+**Aplicação**
+
+```
+expo start -c
 ```
