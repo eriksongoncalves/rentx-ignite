@@ -21,7 +21,9 @@ function Detail() {
   }
 
   function handleConfirm() {
-    navigation.navigate('Scheduling');
+    navigation.navigate('Scheduling', {
+      car
+    });
   }
 
   return (
