@@ -32,14 +32,14 @@ yarn install
 
 <br />
 
-Altere o arquivo `./src/services/api.ts` com o seu IP.
+Renomeie o arquivo `.env.example` na raiz do projeto para `.env` e altere os valores
 
 <br />
 
 **Servidor**
 
 ```
-yarn api
+json-server ./server.json -H [SEU_IP] -p 3333 -d 700
 ```
 
 **Aplicação**
