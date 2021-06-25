@@ -12,7 +12,13 @@ type ButtonProps = {
 
 function Button({ color, title, loading, ...rest }: ButtonProps) {
   return (
-    <S.Container {...rest} color={color}>
+    <S.Container
+      {...rest}
+      color={color}
+      style={{
+        opacity: loading ? 0.5 : 1
+      }}
+    >
       {loading ? (
         <ActivityIndicator color="#fff" />
       ) : (

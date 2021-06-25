@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { StatusBar } from 'react-native';
 import { RFValue } from 'react-native-responsive-fontsize';
 import { useNavigation } from '@react-navigation/native';
+import { Ionicons } from '@expo/vector-icons';
 
 import * as S from './styles';
 import Logo from '../../assets/logo.svg';
@@ -33,6 +34,10 @@ function Home() {
     navigation.navigate('Detail', { car });
   }
 
+  function handleMyCars() {
+    navigation.navigate('MyCars');
+  }
+
   return (
     <S.Container>
       <StatusBar
@@ -58,6 +63,10 @@ function Home() {
           )}
         />
       )}
+
+      <S.MyCarsButton onPress={handleMyCars}>
+        <Ionicons name="ios-car-sport" size={32} color="#fff" />
+      </S.MyCarsButton>
     </S.Container>
   );
 }
