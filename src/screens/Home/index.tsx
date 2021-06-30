@@ -16,7 +16,7 @@ import * as S from './styles';
 import Logo from '../../assets/logo.svg';
 import api from '../../services/api';
 import { ICarDTO } from '../../dtos/CarDTO';
-import { CardCar, Loading } from '../../components';
+import { CardCar, LoadingCar } from '../../components';
 
 const ButtonAnimated = Animated.createAnimatedComponent(RectButton);
 
@@ -92,7 +92,7 @@ function Home() {
       </S.Header>
 
       {loading ? (
-        <Loading />
+        <LoadingCar />
       ) : (
         <S.CardList
           data={cars}
