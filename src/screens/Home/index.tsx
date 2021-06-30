@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { StatusBar, StyleSheet } from 'react-native';
+import { StatusBar, StyleSheet, BackHandler } from 'react-native';
 import { useTheme } from 'styled-components';
 import { RFValue } from 'react-native-responsive-fontsize';
 import { useNavigation } from '@react-navigation/native';
@@ -35,6 +35,8 @@ function Home() {
   }));
 
   useEffect(() => {
+    BackHandler.addEventListener('hardwareBackPress', () => true);
+
     api
       .get<ICarDTO[]>('/cars')
       .then(response => {
@@ -84,7 +86,8 @@ function Home() {
       <S.Header>
         <S.HeaderContent>
           <Logo width={RFValue(108)} height={RFValue(12)} />
-          <S.TotalCar>Total de {cars.length} carros</S.TotalCar>
+
+          {!loading && <S.TotalCar>Total de {cars.length} carros</S.TotalCar>}
         </S.HeaderContent>
       </S.Header>
 

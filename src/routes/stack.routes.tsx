@@ -16,11 +16,19 @@ function StackRoutes() {
   return (
     <Navigator headerMode="none" initialRouteName="Splash">
       <Screen name="Splash" component={Splash} />
-      <Screen name="Home" component={Home} />
+      <Screen
+        name="Home"
+        component={Home}
+        options={{ gestureEnabled: false }}
+      />
       <Screen name="Detail" component={Detail} />
       <Screen name="Scheduling" component={Scheduling} />
       <Screen name="SchedulingDetail" component={SchedulingDetail} />
-      <Screen name="SchedulingComplete" component={SchedulingComplete} />
+      <Screen
+        name="SchedulingComplete"
+        component={SchedulingComplete}
+        options={{ gestureEnabled: false }}
+      />
       <Screen name="MyCars" component={MyCars} />
     </Navigator>
   );

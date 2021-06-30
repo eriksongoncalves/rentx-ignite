@@ -1,5 +1,6 @@
 import React, { useEffect } from 'react';
-
+import { StatusBar } from 'react-native';
+import { useNavigation } from '@react-navigation/core';
 import Animated, {
   useSharedValue,
   useAnimatedStyle,
@@ -8,7 +9,6 @@ import Animated, {
   Extrapolate,
   runOnJS
 } from 'react-native-reanimated';
-import { useNavigation } from '@react-navigation/core';
 
 import * as S from './styles';
 import BrandSvg from '../../assets/brand.svg';
@@ -65,6 +65,12 @@ function Splash() {
 
   return (
     <S.Container>
+      <StatusBar
+        barStyle="light-content"
+        translucent
+        backgroundColor="transparent"
+      />
+
       <Animated.View style={[brandStyle, { position: 'absolute' }]}>
         <BrandSvg width={80} height={50} />
       </Animated.View>
