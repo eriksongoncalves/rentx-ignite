@@ -48,7 +48,7 @@ function Home() {
       <S.Header>
         <S.HeaderContent>
           <Logo width={RFValue(108)} height={RFValue(12)} />
-          <S.TotalCar>Total de 12 carros</S.TotalCar>
+          <S.TotalCar>Total de {cars.length} carros</S.TotalCar>
         </S.HeaderContent>
       </S.Header>
 
