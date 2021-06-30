@@ -19,7 +19,7 @@ export const Header = styled.View`
   position: absolute;
   margin-top: ${getStatusBarHeight() + 18}px;
   margin-left: 24px;
-  z-index: 1;
+  z-index: 2;
 `;
 
 export const CardImages = styled.View`

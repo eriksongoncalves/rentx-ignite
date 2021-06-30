@@ -115,6 +115,7 @@ function Detail() {
 const styles = StyleSheet.create({
   header: {
     position: 'absolute',
+    zIndex: 1,
     overflow: 'hidden'
   }
 });
