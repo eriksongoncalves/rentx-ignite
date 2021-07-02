@@ -13,10 +13,12 @@ import * as S from './styles';
 
 import { schemaValidation, Yup } from './schemaValidation';
 import { Button, Input } from '../../components';
+import { useAuth } from '../../hooks/auth';
 
 function SignIn() {
   const theme = useTheme();
   const navigation = useNavigation();
+  const { signIn } = useAuth();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
@@ -27,16 +29,15 @@ function SignIn() {
         { abortEarly: false }
       );
 
+      await signIn({ email, password });
+
       navigation.navigate('Home');
     } catch (error) {
       if (error instanceof Yup.ValidationError) {
         return Alert.alert('Ops', error.errors[0]);
       }
 
-      Alert.alert(
-        'Erro na autenticação',
-        'Ocorreu um erro ao fazer o login, verifique as credenciais'
-      );
+      Alert.alert('Erro na autenticação', error.message);
     }
   }
 

@@ -14,6 +14,7 @@ import {
 
 import theme from './src/styles/theme';
 import Routes from './src/routes';
+import { AuthProvider } from './src/hooks/auth';
 
 function App() {
   const [fontsLoaded] = useFonts({
@@ -30,7 +31,9 @@ function App() {
 
   return (
     <ThemeProvider theme={theme}>
-      <Routes />
+      <AuthProvider>
+        <Routes />
+      </AuthProvider>
     </ThemeProvider>
   );
 }
