@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Alert } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
+import { useTheme } from 'styled-components';
 import {
   StatusBar,
   KeyboardAvoidingView,
@@ -13,21 +14,21 @@ import * as S from './styles';
 import { schemaValidation, Yup } from './schemaValidation';
 import { Button, Input, Bullet, BackButton } from '../../../components';
 
-function SignUpFirstStep() {
+function SignUpSecondStep() {
   const navigation = useNavigation();
+  const theme = useTheme();
 
-  const [name, setName] = useState('');
-  const [email, setEmail] = useState('');
-  const [cnh, setCnh] = useState('');
+  const [password, setPassword] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState('');
 
   async function handleSubmit() {
     try {
       await schemaValidation.validate(
-        { name, email, cnh },
+        { password, confirmPassword },
         { abortEarly: false }
       );
 
-      navigation.navigate('SignUpSecondStep');
+      navigation.navigate('SignUpComplete');
     } catch (error) {
       if (error instanceof Yup.ValidationError) {
         return Alert.alert('Ops', error.errors[0]);
@@ -52,55 +53,42 @@ function SignUpFirstStep() {
           <S.Header>
             <BackButton color="dark" onPress={handleBack} />
 
-            <Bullet qtdItems={2} currentItem={0} />
+            <Bullet qtdItems={2} currentItem={1} />
           </S.Header>
 
-          <S.Title>
-            Crie sua{'\n'}
-            conta
-          </S.Title>
-          <S.Subtitle>
-            Faça seu cadastro de{'\n'}
-            forma rápida e fácil
-          </S.Subtitle>
-
           <S.Form>
-            <S.FormTitle>1. Dados</S.FormTitle>
+            <S.FormTitle>02. Senha</S.FormTitle>
 
             <Input
-              placeholder="Nome"
-              iconName="user"
+              placeholder="Senha"
+              iconName="lock"
               autoCorrect={false}
               autoCapitalize="none"
-              value={name}
-              onChangeText={setName}
+              isPasswordInput
+              value={password}
+              onChangeText={setPassword}
             />
 
             <Input
-              placeholder="E-mail"
-              iconName="mail"
-              keyboardType="email-address"
+              placeholder="Repetir senha"
+              iconName="lock"
               autoCorrect={false}
               autoCapitalize="none"
-              value={email}
-              onChangeText={setEmail}
-            />
-
-            <Input
-              placeholder="CNH"
-              iconName="credit-card"
-              keyboardType="number-pad"
-              autoCorrect={false}
-              autoCapitalize="none"
-              value={cnh}
-              onChangeText={setCnh}
+              isPasswordInput
+              value={confirmPassword}
+              onChangeText={setConfirmPassword}
             />
           </S.Form>
 
-          <Button title="Próximo" onPress={handleSubmit} loading={false} />
+          <Button
+            title="Cadastrar"
+            color={theme.colors.success}
+            onPress={handleSubmit}
+            loading={false}
+          />
         </S.Container>
       </TouchableWithoutFeedback>
     </KeyboardAvoidingView>
   );
 }
-export default SignUpFirstStep;
+export default SignUpSecondStep;
