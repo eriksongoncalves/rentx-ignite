@@ -8,9 +8,16 @@ type ButtonProps = {
   title: string;
   color?: string;
   loading?: boolean;
+  light?: boolean;
 } & RectButtonProps;
 
-function Button({ color, title, loading, ...rest }: ButtonProps) {
+function Button({
+  color,
+  title,
+  loading,
+  light = false,
+  ...rest
+}: ButtonProps) {
   return (
     <S.Container
       {...rest}
@@ -22,7 +29,7 @@ function Button({ color, title, loading, ...rest }: ButtonProps) {
       {loading ? (
         <ActivityIndicator color="#fff" />
       ) : (
-        <S.Title>{title}</S.Title>
+        <S.Title light={light}>{title}</S.Title>
       )}
     </S.Container>
   );

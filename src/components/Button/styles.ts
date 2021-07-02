@@ -6,6 +6,10 @@ type ContainerProps = {
   color?: string;
 };
 
+type TitleProps = {
+  light?: boolean;
+};
+
 export const Container = styled(RectButton)<ContainerProps>`
   ${({ theme, color }) => css`
     width: 100%;
@@ -14,6 +18,7 @@ export const Container = styled(RectButton)<ContainerProps>`
     align-items: center;
     justify-content: center;
     background-color: ${theme.colors.main};
+    margin-bottom: 8px;
 
     ${!!color &&
     css`
@@ -22,10 +27,15 @@ export const Container = styled(RectButton)<ContainerProps>`
   `}
 `;
 
-export const Title = styled.Text`
-  ${({ theme }) => css`
+export const Title = styled.Text<TitleProps>`
+  ${({ theme, light }) => css`
     font-family: ${theme.fonts.family.inter.medium};
     font-size: ${RFValue(15)}px;
     color: ${theme.colors.shape};
+
+    ${light &&
+    css`
+      color: ${theme.colors.header};
+    `}
   `}
 `;

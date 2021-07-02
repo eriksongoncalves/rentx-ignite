@@ -4,7 +4,7 @@
 
 ## Figma
 
-[Rentx-Ignite](https://www.figma.com/file/vMlp5iDj82AnPzEy4a6KP8/RentX-Ignite)
+[Rentx-Ignite](https://www.figma.com/file/VrlBE1MjvDv0vq3gCvwvGE/RentX-Ignite)
 
 <br />
 
