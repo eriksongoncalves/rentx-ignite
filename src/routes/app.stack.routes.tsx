@@ -1,5 +1,4 @@
 import React from 'react';
-
 import { createStackNavigator } from '@react-navigation/stack';
 
 import Home from '../screens/Home';
@@ -7,21 +6,13 @@ import Detail from '../screens/Detail';
 import Scheduling from '../screens/Scheduling';
 import SchedulingDetail from '../screens/SchedulingDetail';
 import MyCars from '../screens/MyCars';
-import Splash from '../screens/Splash';
-import SignIn from '../screens/SignIn';
-import SignUpFirstStep from '../screens/SignUp/FirstStep';
-import SignUpSecondStep from '../screens/SignUp/SecondStep';
 import Confirmation from '../screens/Confirmation';
 
 const { Navigator, Screen } = createStackNavigator();
 
-function StackRoutes() {
+function AppStackRoutes() {
   return (
     <Navigator headerMode="none" initialRouteName="Home">
-      <Screen name="Splash" component={Splash} />
-      <Screen name="SignIn" component={SignIn} />
-      <Screen name="SignUpFirstStep" component={SignUpFirstStep} />
-      <Screen name="SignUpSecondStep" component={SignUpSecondStep} />
       <Screen
         name="Confirmation"
         component={Confirmation}
@@ -41,4 +32,4 @@ function StackRoutes() {
   );
 }
 
-export default StackRoutes;
+export default AppStackRoutes;

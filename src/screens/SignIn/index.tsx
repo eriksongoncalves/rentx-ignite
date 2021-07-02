@@ -30,8 +30,6 @@ function SignIn() {
       );
 
       await signIn({ email, password });
-
-      navigation.navigate('Home');
     } catch (error) {
       if (error instanceof Yup.ValidationError) {
         return Alert.alert('Ops', error.errors[0]);
