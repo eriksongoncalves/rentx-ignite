@@ -12,14 +12,6 @@
 
 <br />
 
-Instale o json-server
-
-```
-yarn add -g json-server
-```
-
-<br />
-
 Na raiz do projeto instale as dependências:
 
 ```
@@ -38,7 +30,7 @@ Renomeie o arquivo `.env.example` na raiz do projeto para `.env` e altere os val
 
 **Servidor**
 
-Faça o clone [API](https://github.com/rodrigorgtic/rentx-api-ignite), instale as dependências e start o projeto com `yarn start`
+Faça o clone data [API](https://github.com/rodrigorgtic/rentx-api-ignite), instale as dependências e start o projeto com `yarn start`
 
 <br />
 
