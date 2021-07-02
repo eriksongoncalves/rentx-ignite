@@ -7,41 +7,34 @@ import {
   TouchableWithoutFeedback,
   Keyboard
 } from 'react-native';
-import { useTheme } from 'styled-components';
 
 import * as S from './styles';
 
 import { schemaValidation, Yup } from './schemaValidation';
-import { Button, Input } from '../../components';
+import { Button, Input, Bullet, BackButton } from '../../../components';
 
-function SignIn() {
-  const theme = useTheme();
+function SignUpFirstStep() {
   const navigation = useNavigation();
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
 
-  async function handleSignIn() {
+  const [name, setName] = useState('');
+  const [email, setEmail] = useState('');
+  const [cnh, setCnh] = useState('');
+
+  async function handleSubmit() {
     try {
       await schemaValidation.validate(
-        { email, password },
+        { name, email, cnh },
         { abortEarly: false }
       );
-
-      navigation.navigate('Home');
     } catch (error) {
       if (error instanceof Yup.ValidationError) {
         return Alert.alert('Ops', error.errors[0]);
       }
-
-      Alert.alert(
-        'Erro na autenticação',
-        'Ocorreu um erro ao fazer o login, verifique as credenciais'
-      );
     }
   }
 
-  function handleNavigateSignUp() {
-    navigation.navigate('SignUpFirstStep');
+  function handleBack() {
+    navigation.goBack();
   }
 
   return (
@@ -55,17 +48,32 @@ function SignIn() {
           />
 
           <S.Header>
-            <S.Title>
-              Estamos{'\n'}
-              quase lá
-            </S.Title>
-            <S.Subtitle>
-              Faça seu login para começar{'\n'}
-              uma experiência incrivel
-            </S.Subtitle>
+            <BackButton color="dark" onPress={handleBack} />
+
+            <Bullet qtdItems={2} currentItem={0} />
           </S.Header>
 
+          <S.Title>
+            Crie sua{'\n'}
+            conta
+          </S.Title>
+          <S.Subtitle>
+            Faça seu cadastro de{'\n'}
+            forma rápida e fácil
+          </S.Subtitle>
+
           <S.Form>
+            <S.FormTitle>1. Dados</S.FormTitle>
+
+            <Input
+              placeholder="Nome"
+              iconName="user"
+              autoCorrect={false}
+              autoCapitalize="none"
+              value={name}
+              onChangeText={setName}
+            />
+
             <Input
               placeholder="E-mail"
               iconName="mail"
@@ -75,30 +83,22 @@ function SignIn() {
               value={email}
               onChangeText={setEmail}
             />
+
             <Input
-              placeholder="Senha"
-              iconName="lock"
+              placeholder="CNH"
+              iconName="credit-card"
+              keyboardType="number-pad"
               autoCorrect={false}
               autoCapitalize="none"
-              isPasswordInput
-              value={password}
-              onChangeText={setPassword}
+              value={cnh}
+              onChangeText={setCnh}
             />
           </S.Form>
 
-          <S.Footer>
-            <Button title="Login" onPress={handleSignIn} loading={false} />
-            <Button
-              title="Criar conta gratuita"
-              onPress={handleNavigateSignUp}
-              color={theme.colors.background_secundary}
-              loading={false}
-              light
-            />
-          </S.Footer>
+          <Button title="Próximo" onPress={handleSubmit} loading={false} />
         </S.Container>
       </TouchableWithoutFeedback>
     </KeyboardAvoidingView>
   );
 }
-export default SignIn;
+export default SignUpFirstStep;

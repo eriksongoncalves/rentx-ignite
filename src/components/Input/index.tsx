@@ -49,7 +49,7 @@ function Input({
       </S.IconContainer>
       <S.InputText
         {...rest}
-        secureTextEntry={isPasswordInput && !isPasswordVisible}
+        secureTextEntry={isPasswordInput && isPasswordVisible}
         onFocus={handleInputFocus}
         onBlur={handleInputBlur}
         isFocused={isFocused || isFilled}
