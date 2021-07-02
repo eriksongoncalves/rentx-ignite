@@ -3,10 +3,8 @@ import { RectButtonProps } from 'react-native-gesture-handler';
 
 import * as S from './styles';
 
-import GasolineSvg from '../../assets/gasoline.svg';
 import { ICarDTO } from '../../dtos/CarDTO';
 import { getAccessoryIcon } from '../../utils/getAccessoryIcon';
-
 
 type CardCarProps = {
   data: ICarDTO;
@@ -22,8 +20,8 @@ function CardCar({ data, ...rest }: CardCarProps) {
 
         <S.About>
           <S.Rent>
-            <S.Period>{data.rent.period}</S.Period>
-            <S.Price>R$ {data.rent.price}</S.Price>
+            <S.Period>{data.period}</S.Period>
+            <S.Price>R$ {data.price}</S.Price>
           </S.Rent>
 
           <S.Type>

@@ -4,8 +4,13 @@ import Bullet from '../Bullet';
 
 import * as S from './styles';
 
+export type PhotoProps = {
+  id: string;
+  photo: string;
+};
+
 export type ImageSliderProps = {
-  imagesUrl: string[];
+  imagesUrl: PhotoProps[];
 };
 
 type ChangeImageProps = {
@@ -30,10 +35,10 @@ function ImageSlider({ imagesUrl }: ImageSliderProps) {
       <S.CardSlider
         pagingEnabled={true}
         data={imagesUrl}
-        keyExtractor={key => key}
+        keyExtractor={item => item.id}
         renderItem={({ item }) => (
           <S.CardImageWrapper>
-            <S.CardImage source={{ uri: item }} resizeMode="contain" />
+            <S.CardImage source={{ uri: item.photo }} resizeMode="contain" />
           </S.CardImageWrapper>
         )}
         onViewableItemsChanged={indexChanged.current}
