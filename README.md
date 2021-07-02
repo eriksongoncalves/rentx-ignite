@@ -38,9 +38,9 @@ Renomeie o arquivo `.env.example` na raiz do projeto para `.env` e altere os val
 
 **Servidor**
 
-```
-json-server ./server.json -H [SEU_IP] -p 3333 -d 700
-```
+Faça o clone [API](https://github.com/rodrigorgtic/rentx-api-ignite), instale as dependências e start o projeto com `yarn start`
+
+<br />
 
 **Aplicação**
 
