@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { Alert } from 'react-native';
 import {
   StatusBar,
   KeyboardAvoidingView,
@@ -8,12 +9,29 @@ import {
 import { useTheme } from 'styled-components';
 
 import * as S from './styles';
+
+import { schemaValidation, Yup } from './schemaValidation';
 import { Button, Input } from '../../components';
 
 function SignIn() {
   const theme = useTheme();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+
+  async function handleSignIn() {
+    try {
+      await schemaValidation.validate({ email, password });
+    } catch (error) {
+      if (error instanceof Yup.ValidationError) {
+        return Alert.alert('Ops', error.message);
+      }
+
+      Alert.alert(
+        'Erro na autenticação',
+        'Ocorreu um erro ao fazer o login, verifique as credenciais'
+      );
+    }
+  }
 
   return (
     <KeyboardAvoidingView behavior="position" enabled>
@@ -58,7 +76,7 @@ function SignIn() {
           </S.Form>
 
           <S.Footer>
-            <Button title="Login" onPress={() => {}} loading={false} />
+            <Button title="Login" onPress={handleSignIn} loading={false} />
             <Button
               title="Criar conta gratuita"
               onPress={() => {}}
