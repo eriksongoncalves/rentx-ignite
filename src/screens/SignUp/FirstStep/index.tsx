@@ -18,16 +18,17 @@ function SignUpFirstStep() {
 
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
-  const [cnh, setCnh] = useState('');
+  const [driver_license, setDriverLicence] = useState('');
 
   async function handleSubmit() {
-    try {
-      await schemaValidation.validate(
-        { name, email, cnh },
-        { abortEarly: false }
-      );
+    const data = { name, email, driver_license };
 
-      navigation.navigate('SignUpSecondStep');
+    try {
+      await schemaValidation.validate(data, { abortEarly: false });
+
+      navigation.navigate('SignUpSecondStep', {
+        user: data
+      });
     } catch (error) {
       if (error instanceof Yup.ValidationError) {
         return Alert.alert('Ops', error.errors[0]);
@@ -92,8 +93,8 @@ function SignUpFirstStep() {
               keyboardType="number-pad"
               autoCorrect={false}
               autoCapitalize="none"
-              value={cnh}
-              onChangeText={setCnh}
+              value={driver_license}
+              onChangeText={setDriverLicence}
             />
           </S.Form>
 

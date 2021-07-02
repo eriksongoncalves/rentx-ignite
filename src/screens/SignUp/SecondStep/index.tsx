@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Alert } from 'react-native';
-import { useNavigation } from '@react-navigation/native';
+import { useNavigation, useRoute } from '@react-navigation/native';
 import { useTheme } from 'styled-components';
 import {
   StatusBar,
@@ -14,9 +14,20 @@ import * as S from './styles';
 import { schemaValidation, Yup } from './schemaValidation';
 import { Button, Input, Bullet, BackButton } from '../../../components';
 
+type RouteParams = {
+  user: {
+    name: string;
+    email: string;
+    cnh: string;
+  };
+};
+
 function SignUpSecondStep() {
   const navigation = useNavigation();
+  const { params } = useRoute();
   const theme = useTheme();
+
+  const { user } = params as RouteParams;
 
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
@@ -28,7 +39,16 @@ function SignUpSecondStep() {
         { abortEarly: false }
       );
 
-      navigation.navigate('SignUpComplete');
+      console.log({
+        ...user,
+        password
+      });
+
+      navigation.navigate('Confirmation', {
+        title: 'Conta criada!',
+        message: 'Agora é só fazer login\ne aproveitar',
+        nextScreenRoute: 'SignIn'
+      });
     } catch (error) {
       if (error instanceof Yup.ValidationError) {
         return Alert.alert('Ops', error.errors[0]);
