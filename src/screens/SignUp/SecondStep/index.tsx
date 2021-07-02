@@ -13,12 +13,13 @@ import * as S from './styles';
 
 import { schemaValidation, Yup } from './schemaValidation';
 import { Button, Input, Bullet, BackButton } from '../../../components';
+import api from '../../../services/api';
 
 type RouteParams = {
   user: {
     name: string;
     email: string;
-    cnh: string;
+    driver_license: string;
   };
 };
 
@@ -39,7 +40,7 @@ function SignUpSecondStep() {
         { abortEarly: false }
       );
 
-      console.log({
+      await api.post('/users', {
         ...user,
         password
       });
@@ -53,6 +54,8 @@ function SignUpSecondStep() {
       if (error instanceof Yup.ValidationError) {
         return Alert.alert('Ops', error.errors[0]);
       }
+
+      return Alert.alert('Ops', 'Não foi possível cadastrar');
     }
   }
 
