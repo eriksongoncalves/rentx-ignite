@@ -1,5 +1,6 @@
 import React, { useState, useRef } from 'react';
 import { ViewToken } from 'react-native';
+import Bullet from '../Bullet';
 
 import * as S from './styles';
 
@@ -22,11 +23,9 @@ function ImageSlider({ imagesUrl }: ImageSliderProps) {
 
   return (
     <S.Container>
-      <S.ImageIndexs>
-        {imagesUrl.map((item, index) => (
-          <S.ImageIndex key={item} active={index === imageIndex} />
-        ))}
-      </S.ImageIndexs>
+      <S.BulletWrapper>
+        <Bullet qtdItems={imagesUrl.length} currentItem={imageIndex} />
+      </S.BulletWrapper>
 
       <S.CardSlider
         pagingEnabled={true}
