@@ -15,17 +15,27 @@ function Home() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
+    let isMounted = true;
+
     api
       .get<ICarDTO[]>('/cars')
       .then(response => {
-        setCars(response.data);
+        if (isMounted) {
+          setCars(response.data);
+        }
       })
       .catch(() => {
         Alert.alert('Ocorreu um erro ao carregar a lista de carros');
       })
       .finally(() => {
-        setLoading(false);
+        if (isMounted) {
+          setLoading(false);
+        }
       });
+
+    return () => {
+      isMounted = false;
+    };
   }, []);
 
   function handleCarDetail(car: ICarDTO) {

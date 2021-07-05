@@ -1,13 +1,15 @@
-import React, { useState, createContext, useContext } from 'react';
+import React, { useState, useEffect, createContext, useContext } from 'react';
 import * as types from './types';
 import api from '../services/api';
+import { database } from '../database';
+import { User as ModelUser } from '../database/models/User';
 
 const AuthContext = createContext<types.AuthContextProps>(
   {} as types.AuthContextProps
 );
 
 const AuthProvider = ({ children }: types.AuthProviderProps) => {
-  const [data, setData] = useState({} as types.AuthData);
+  const [data, setData] = useState<types.User>({} as types.User);
 
   const signIn = async ({ email, password }: types.SignInCredentials) => {
     try {
@@ -18,14 +20,44 @@ const AuthProvider = ({ children }: types.AuthProviderProps) => {
 
       api.defaults.headers.authorization = `Bearer ${data.token}`;
 
-      setData(data);
+      const userCollection = database.get<ModelUser>('users');
+      await database.action(async () => {
+        await userCollection.create(newUser => {
+          newUser.user_id = data.user.id;
+          newUser.name = data.user.name;
+          newUser.email = data.user.email;
+          newUser.driver_license = data.user.driver_license;
+          newUser.avatar = data.user.avatar;
+          newUser.token = data.token;
+        });
+      });
+
+      setData({
+        ...data.user,
+        token: data.token
+      });
     } catch (error) {
       throw new Error('Login ou senha inválidos');
     }
   };
 
+  useEffect(() => {
+    async function loadUserData() {
+      const userCollection = database.get<ModelUser>('users');
+      const response = await userCollection.query().fetch();
+
+      if (response.length > 0) {
+        const userData = response[0]._raw as unknown as types.User;
+        api.defaults.headers.authorization = `Bearer ${userData.token}`;
+        setData(userData);
+      }
+    }
+
+    loadUserData();
+  }, []);
+
   return (
-    <AuthContext.Provider value={{ user: data.user, signIn }}>
+    <AuthContext.Provider value={{ user: data, signIn }}>
       {children}
     </AuthContext.Provider>
   );
