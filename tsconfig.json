@@ -15,8 +15,11 @@
     "strict": true,
     "esModuleInterop": true,
     "isolatedModules": true,
+    "experimentalDecorators": true
   },
-  "typeRoots": ["./src/@types"],
+  "typeRoots": [
+    "./src/@types"
+  ],
   "exclude": [
     "node_modules",
     "babel.config.js",
