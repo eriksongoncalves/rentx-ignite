@@ -3,6 +3,7 @@ import { useNavigation } from '@react-navigation/native';
 import { useBottomTabBarHeight } from '@react-navigation/bottom-tabs';
 import { useTheme } from 'styled-components';
 import { Feather } from '@expo/vector-icons';
+import * as ImagePicker from 'expo-image-picker';
 import {
   StatusBar,
   KeyboardAvoidingView,
@@ -26,6 +27,7 @@ function Profile() {
   const [oldPassword, setOldPassword] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
+  const [avatar, setAvatar] = useState(user.avatar);
 
   function handleBack() {
     navigation.goBack();
@@ -33,6 +35,23 @@ function Profile() {
 
   function handleSignOut() {
     navigation.goBack();
+  }
+
+  async function handleSelectAvatar() {
+    const result = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.Images,
+      allowsEditing: true,
+      aspect: [4, 4],
+      quality: 1
+    });
+
+    if (result.cancelled) {
+      return;
+    }
+
+    if (result.uri) {
+      setAvatar(result.uri);
+    }
   }
 
   return (
@@ -54,11 +73,9 @@ function Profile() {
             </S.HeaderTop>
 
             <S.PhotoContainer>
-              <S.Photo
-                source={{ uri: 'https://github.com/rodrigorgtic.png' }}
-              />
+              {!!avatar && <S.Photo source={{ uri: avatar }} />}
 
-              <S.PhotoButton>
+              <S.PhotoButton onPress={handleSelectAvatar}>
                 <Feather name="camera" size={24} color={theme.colors.shape} />
               </S.PhotoButton>
             </S.PhotoContainer>
