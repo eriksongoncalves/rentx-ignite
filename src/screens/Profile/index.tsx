@@ -8,17 +8,19 @@ import {
   StatusBar,
   KeyboardAvoidingView,
   TouchableWithoutFeedback,
-  Keyboard
+  Keyboard,
+  Alert
 } from 'react-native';
 
 import * as S from './styles';
-import { BackButton, Input } from '../../components';
+import { Yup, schemaEditProfileValidation } from './schemaValidation';
+import { BackButton, Button, Input } from '../../components';
 import { useAuth } from '../../hooks/auth';
 
 function Profile() {
   const theme = useTheme();
   const navigation = useNavigation();
-  const { user, signOut } = useAuth();
+  const { user, signOut, updateUser } = useAuth();
 
   const [option, setOption] = useState<'dataEdit' | 'passwordEdit'>('dataEdit');
   const [name, setName] = useState('');
@@ -47,6 +49,30 @@ function Profile() {
 
     if (result.uri) {
       setAvatar(result.uri);
+    }
+  }
+
+  async function handleProfileUpdate() {
+    try {
+      const data = {
+        name,
+        email,
+        driver_license
+      };
+
+      await schemaEditProfileValidation.validate(data, { abortEarly: false });
+
+      await updateUser({
+        ...user,
+        ...data,
+        avatar
+      });
+    } catch (error) {
+      if (error instanceof Yup.ValidationError) {
+        return Alert.alert('Ops', error.errors[0]);
+      }
+
+      Alert.alert('Não foi possível atualizar o perfil');
     }
   }
 
@@ -166,6 +192,8 @@ function Profile() {
                 </>
               )}
             </S.Section>
+
+            <Button title="Salvar alterações" onPress={handleProfileUpdate} />
           </S.Content>
         </S.Container>
       </TouchableWithoutFeedback>

@@ -55,6 +55,26 @@ const AuthProvider = ({ children }: types.AuthProviderProps) => {
     }
   };
 
+  const updateUser = async (user: types.User) => {
+    try {
+      const userCollection = database.get<ModelUser>('users');
+      await database.action(async () => {
+        const userSelected = await userCollection.find(user.id);
+        await userSelected.update(userData => {
+          userData.name = user.name;
+          userData.driver_license = user.driver_license;
+          userData.avatar = user.avatar;
+        });
+      });
+
+      setData(user);
+
+      setData({} as types.User);
+    } catch (error) {
+      throw new Error(error);
+    }
+  };
+
   useEffect(() => {
     async function loadUserData() {
       const userCollection = database.get<ModelUser>('users');
@@ -71,7 +91,7 @@ const AuthProvider = ({ children }: types.AuthProviderProps) => {
   }, []);
 
   return (
-    <AuthContext.Provider value={{ user: data, signIn, signOut }}>
+    <AuthContext.Provider value={{ user: data, signIn, signOut, updateUser }}>
       {children}
     </AuthContext.Provider>
   );
