@@ -1,5 +1,7 @@
 import styled from 'styled-components/native';
 import { FlatList, Dimensions } from 'react-native';
+import FastImage from 'react-native-fast-image';
+
 import { PhotoProps } from '.';
 
 export const Container = styled.View``;
@@ -11,7 +13,7 @@ export const CardImageWrapper = styled.View`
   align-items: center;
 `;
 
-export const CardImage = styled.Image`
+export const CardImage = styled(FastImage)`
   width: 280px;
   height: 132px;
 `;

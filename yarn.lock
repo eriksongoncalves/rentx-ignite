@@ -8351,6 +8351,11 @@ react-native-dotenv@^2.5.5:
   dependencies:
     dotenv "^8.0.0"
 
+react-native-fast-image@^8.3.5:
+  version "8.3.5"
+  resolved "https://registry.yarnpkg.com/react-native-fast-image/-/react-native-fast-image-8.3.5.tgz#1802ee69e98cf84310d7fa68f50f842ad0cc9f84"
+  integrity sha512-ouYTbLGk6IfzIUy8wr+CgWnFWJJaE1hEPMZ0jyv39hwfH/U0GeLLMEi5/BTD7LYKxDIRECli5lljONdKglmzWg==
+
 react-native-gesture-handler@~1.10.2:
   version "1.10.3"
   resolved "https://registry.yarnpkg.com/react-native-gesture-handler/-/react-native-gesture-handler-1.10.3.tgz#942bbf2963bbf49fa79593600ee9d7b5dab3cfc0"

@@ -1,9 +1,9 @@
 import React from 'react';
 import { RectButtonProps } from 'react-native-gesture-handler';
 import { useNetInfo } from '@react-native-community/netinfo';
+import FastImage from 'react-native-fast-image';
 
 import * as S from './styles';
-
 import { Car as ModelCar } from '../../database/models/Car';
 import { getAccessoryIcon } from '../../utils/getAccessoryIcon';
 
@@ -33,11 +33,21 @@ function CardCar({ data, ...rest }: CardCarProps) {
         </S.About>
       </S.Detail>
 
+      {/* <FastImage
+        style={{ width: 200, height: 200 }}
+        source={{
+            uri: 'https://unsplash.it/400/400?image=1',
+            headers: { Authorization: 'someAuthToken' },
+            priority: FastImage.priority.normal,
+        }}
+        resizeMode={FastImage.resizeMode.contain}
+    /> */}
+
       <S.CarImage
         source={{
           uri: data.thumbnail
         }}
-        resizeMode="contain"
+        resizeMode={FastImage.resizeMode.contain}
       />
     </S.Container>
   );
