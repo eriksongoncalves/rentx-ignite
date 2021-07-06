@@ -10,6 +10,7 @@ const AuthContext = createContext<types.AuthContextProps>(
 
 const AuthProvider = ({ children }: types.AuthProviderProps) => {
   const [data, setData] = useState<types.User>({} as types.User);
+  const [loading, setLoading] = useState(true);
 
   const signIn = async ({ email, password }: types.SignInCredentials) => {
     try {
@@ -84,6 +85,7 @@ const AuthProvider = ({ children }: types.AuthProviderProps) => {
         const userData = response[0]._raw as unknown as types.User;
         api.defaults.headers.authorization = `Bearer ${userData.token}`;
         setData(userData);
+        setLoading(false);
       }
     }
 
@@ -91,7 +93,9 @@ const AuthProvider = ({ children }: types.AuthProviderProps) => {
   }, []);
 
   return (
-    <AuthContext.Provider value={{ user: data, signIn, signOut, updateUser }}>
+    <AuthContext.Provider
+      value={{ user: data, signIn, signOut, updateUser, loading }}
+    >
       {children}
     </AuthContext.Provider>
   );

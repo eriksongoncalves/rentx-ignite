@@ -25,6 +25,7 @@ export type AuthContextProps = {
   signIn(credentials: SignInCredentials): Promise<void>;
   signOut(): Promise<void>;
   updateUser(user: User): Promise<void>;
+  loading: boolean;
 };
 
 export type AuthProviderProps = {

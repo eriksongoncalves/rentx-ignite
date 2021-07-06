@@ -4,9 +4,14 @@ import AuthStackRoutes from './auth.stack.routes';
 import AppTabRoutes from './app.tab.routes';
 
 import { useAuth } from '../hooks/auth';
+import { LoadingCar } from '../components';
 
 function Routes() {
-  const { user } = useAuth();
+  const { user, loading } = useAuth();
+
+  if (loading) {
+    return <LoadingCar />;
+  }
 
   return (
     <NavigationContainer>

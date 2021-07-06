@@ -3,11 +3,11 @@ import { RectButtonProps } from 'react-native-gesture-handler';
 
 import * as S from './styles';
 
-import { ICarDTO } from '../../dtos/CarDTO';
+import { Car as ModelCar } from '../../database/models/Car';
 import { getAccessoryIcon } from '../../utils/getAccessoryIcon';
 
 type CardCarProps = {
-  data: ICarDTO;
+  data: ModelCar;
 } & RectButtonProps;
 
 function CardCar({ data, ...rest }: CardCarProps) {
