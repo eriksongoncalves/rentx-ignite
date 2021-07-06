@@ -1,5 +1,6 @@
 import React from 'react';
 import { RectButtonProps } from 'react-native-gesture-handler';
+import { useNetInfo } from '@react-native-community/netinfo';
 
 import * as S from './styles';
 
@@ -11,7 +12,9 @@ type CardCarProps = {
 } & RectButtonProps;
 
 function CardCar({ data, ...rest }: CardCarProps) {
+  const netInfo = useNetInfo();
   const MotorIcon = getAccessoryIcon(data.fuel_type);
+
   return (
     <S.Container {...rest}>
       <S.Detail>
@@ -21,7 +24,7 @@ function CardCar({ data, ...rest }: CardCarProps) {
         <S.About>
           <S.Rent>
             <S.Period>{data.period}</S.Period>
-            <S.Price>R$ {data.price}</S.Price>
+            <S.Price>R$ {netInfo.isConnected ? data.price : '...'}</S.Price>
           </S.Rent>
 
           <S.Type>

@@ -11,18 +11,22 @@ import {
   Keyboard,
   Alert
 } from 'react-native';
+import { useNetInfo } from '@react-native-community/netinfo';
 
 import * as S from './styles';
 import { Yup, schemaEditProfileValidation } from './schemaValidation';
 import { BackButton, Button, Input } from '../../components';
 import { useAuth } from '../../hooks/auth';
 
+type Option = 'dataEdit' | 'passwordEdit';
+
 function Profile() {
   const theme = useTheme();
   const navigation = useNavigation();
   const { user, signOut, updateUser } = useAuth();
+  const netInfo = useNetInfo();
 
-  const [option, setOption] = useState<'dataEdit' | 'passwordEdit'>('dataEdit');
+  const [option, setOption] = useState<Option>('dataEdit');
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [driver_license, setDriverLicence] = useState('');
@@ -33,6 +37,17 @@ function Profile() {
 
   function handleBack() {
     navigation.goBack();
+  }
+
+  function handleOptionChange(optionSelected: Option) {
+    if (!netInfo.isConnected && optionSelected === 'passwordEdit') {
+      Alert.alert(
+        'Sem conexão',
+        'Você precisar estar conectado a internet para alterar a sua senha.'
+      );
+    } else {
+      setOption(optionSelected);
+    }
   }
 
   async function handleSelectAvatar() {
@@ -124,7 +139,7 @@ function Profile() {
             <S.Options>
               <S.Option
                 active={option === 'dataEdit'}
-                onPress={() => setOption('dataEdit')}
+                onPress={() => handleOptionChange('dataEdit')}
               >
                 <S.OptionTitle active={option === 'dataEdit'}>
                   Dados
@@ -132,7 +147,7 @@ function Profile() {
               </S.Option>
               <S.Option
                 active={option === 'passwordEdit'}
-                onPress={() => setOption('passwordEdit')}
+                onPress={() => handleOptionChange('passwordEdit')}
               >
                 <S.OptionTitle active={option === 'passwordEdit'}>
                   Trocar senha

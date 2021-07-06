@@ -1,5 +1,5 @@
-import React from 'react';
-import { StyleSheet, StatusBar } from 'react-native';
+import React, { useState, useEffect } from 'react';
+import { StyleSheet, StatusBar, Alert } from 'react-native';
 import { useNavigation, useRoute } from '@react-navigation/native';
 import { useTheme } from 'styled-components';
 import Animated, {
@@ -10,14 +10,17 @@ import Animated, {
   Extrapolate
 } from 'react-native-reanimated';
 import { getStatusBarHeight } from 'react-native-iphone-x-helper';
+import { useNetInfo } from '@react-native-community/netinfo';
 
 import * as S from './styles';
 import { BackButton, ImageSlider, Accessory, Button } from '../../components';
-import { ICarDTO } from '../../dtos/CarDTO';
 import { getAccessoryIcon } from '../../utils/getAccessoryIcon';
+import { Car as ModelCar } from '../../database/models/Car';
+import { ICarDTO } from '../../dtos/CarDTO';
+import api from '../../services/api';
 
 type RouteParams = {
-  car: ICarDTO;
+  car: ModelCar;
 };
 
 function Detail() {
@@ -25,6 +28,10 @@ function Detail() {
   const navigation = useNavigation();
   const theme = useTheme();
   const { car } = route.params as RouteParams;
+  const netInfo = useNetInfo();
+
+  const [carUpdated, setCarUpdated] = useState<ICarDTO>({} as ICarDTO);
+
   const scrollY = useSharedValue(0);
   const scrollHandler = useAnimatedScrollHandler(event => {
     scrollY.value = event.contentOffset.y;
@@ -42,10 +49,34 @@ function Detail() {
   }
 
   function handleConfirm() {
-    navigation.navigate('Scheduling', {
-      car
-    });
+    if (netInfo.isConnected) {
+      navigation.navigate('Scheduling', {
+        car
+      });
+    } else {
+      Alert.alert(
+        'Sem conexão',
+        'Você precisar estar conectado a internet para realizar um agendamento.'
+      );
+    }
   }
+
+  useEffect(() => {
+    async function fetchCarUpdated() {
+      try {
+        const response = await api.get(`/cars/${car.id}`);
+
+        setCarUpdated(response.data);
+      } catch (error) {
+        // eslint-disable-next-line no-console
+        console.log('ERROR fetchCarUpdated - ', error);
+      }
+    }
+
+    if (netInfo.isConnected) {
+      fetchCarUpdated();
+    }
+  }, [car.id, netInfo.isConnected]);
 
   return (
     <S.Container>
@@ -67,7 +98,13 @@ function Detail() {
       >
         <Animated.View style={[sliderCarAnimation]}>
           <S.CardImages>
-            <ImageSlider imagesUrl={car.photos} />
+            <ImageSlider
+              imagesUrl={
+                carUpdated.photos
+                  ? carUpdated.photos
+                  : [{ id: car.thumbnail, photo: car.thumbnail }]
+              }
+            />
           </S.CardImages>
         </Animated.View>
       </Animated.View>
@@ -88,25 +125,32 @@ function Detail() {
           </S.Description>
           <S.Rent>
             <S.Period>{car.period}</S.Period>
-            <S.Price>R$ {car.price}</S.Price>
+            <S.Price>R$ {netInfo.isConnected ? car.price : '...'}</S.Price>
           </S.Rent>
         </S.Details>
 
-        <S.Accessories>
-          {car.accessories.map(item => (
-            <Accessory
-              key={item.type}
-              name={item.name}
-              icon={getAccessoryIcon(item.type)}
-            />
-          ))}
-        </S.Accessories>
+        {carUpdated.accessories && (
+          <S.Accessories>
+            {carUpdated.accessories.map(item => (
+              <Accessory
+                key={item.type}
+                name={item.name}
+                icon={getAccessoryIcon(item.type)}
+              />
+            ))}
+          </S.Accessories>
+        )}
 
         <S.About>{car.about}</S.About>
       </Animated.ScrollView>
 
       <S.Footer>
         <Button title="Escolher período do aluguel" onPress={handleConfirm} />
+        {netInfo.isConnected && (
+          <S.OfflineInfo>
+            Conecte-se a internet para ver mais detalhes e agendar seu carro.
+          </S.OfflineInfo>
+        )}
       </S.Footer>
     </S.Container>
   );
