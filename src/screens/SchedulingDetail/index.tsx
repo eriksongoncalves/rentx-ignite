@@ -5,6 +5,7 @@ import { useTheme } from 'styled-components';
 import { RFValue } from 'react-native-responsive-fontsize';
 import { useNavigation, useRoute } from '@react-navigation/native';
 import { format } from 'date-fns';
+import { useNetInfo } from '@react-native-community/netinfo';
 
 import * as S from './styles';
 import { ICarDTO } from '../../dtos/CarDTO';
@@ -24,6 +25,8 @@ type RouteParams = {
 };
 
 function SchedulingDetail() {
+  const netInfo = useNetInfo();
+  const [carUpdated, setCarUpdated] = useState<ICarDTO>({} as ICarDTO);
   const [rentalPeriod, setRentalPeriod] = useState<RentalPeriod>(
     {} as RentalPeriod
   );
@@ -34,7 +37,7 @@ function SchedulingDetail() {
   const { car, dates } = route.params as RouteParams;
 
   const rentTotal = useMemo(
-    () => Number(dates.length * car.rent.price),
+    () => Number(dates.length * car.price),
     [car, dates]
   );
 
@@ -43,41 +46,37 @@ function SchedulingDetail() {
   }
 
   async function handleConfirmRental() {
-    try {
-      setLoading(true);
-      const schedulesByCar = await api.get(`/schedules_bycars/${car.id}`);
+    if (netInfo.isConnected) {
+      try {
+        setLoading(true);
 
-      const unavailable_dates = [
-        ...schedulesByCar.data.unavailable_dates,
-        ...dates
-      ];
+        await api.post('/rentals', {
+          user_id: 1,
+          car_id: car.id,
+          start_date: new Date(dates[0]),
+          end_date: new Date(dates[dates.length - 1]),
+          total: rentTotal
+        });
 
-      await api.post(`/schedules_byuser`, {
-        user_id: 1,
-        car,
-        startDate: format(getPlatformDate(new Date(dates[0])), 'dd/MM/yyyy'),
-        endDate: format(
-          getPlatformDate(new Date(dates[dates.length - 1])),
-          'dd/MM/yyyy'
-        )
-      });
+        navigation.navigate('Confirmation', {
+          title: 'Carro alugado!',
+          message: `Agora você só precisa ir\naté a concessionária da RENTX\npegar o seu automóvel`,
+          nextScreenRoute: 'Home'
+        });
 
-      await api.put(`/schedules_bycars/${car.id}`, {
-        id: car.id,
-        unavailable_dates
-      });
-
-      navigation.navigate('Confirmation', {
-        title: 'Carro alugado!',
-        message: `Agora você só precisa ir\naté a concessionária da RENTX\npegar o seu automóvel`,
-        nextScreenRoute: 'Home'
-      });
-
-      navigation.navigate('SchedulingComplete');
-    } catch (error) {
-      Alert.alert('Não foi possível confirmar o agendamento');
-    } finally {
-      setLoading(false);
+        navigation.navigate('SchedulingComplete');
+      } catch (error) {
+        // eslint-disable-next-line no-console
+        console.log('ERROR - handleConfirmRental', error);
+        Alert.alert('Não foi possível confirmar o agendamento');
+      } finally {
+        setLoading(false);
+      }
+    } else {
+      Alert.alert(
+        'Sem conexão',
+        'Você precisar estar conectado a internet para realizar um agendamento.'
+      );
     }
   }
 
@@ -91,6 +90,23 @@ function SchedulingDetail() {
     });
   }, [dates]);
 
+  useEffect(() => {
+    async function fetchCarUpdated() {
+      try {
+        const response = await api.get(`/cars/${car.id}`);
+
+        setCarUpdated(response.data);
+      } catch (error) {
+        // eslint-disable-next-line no-console
+        console.log('ERROR fetchCarUpdated - ', error);
+      }
+    }
+
+    if (netInfo.isConnected) {
+      fetchCarUpdated();
+    }
+  }, [car.id, netInfo.isConnected]);
+
   return (
     <S.Container>
       <S.Header>
@@ -98,7 +114,13 @@ function SchedulingDetail() {
       </S.Header>
 
       <S.CardImages>
-        <ImageSlider imagesUrl={car.photos} />
+        <ImageSlider
+          imagesUrl={
+            carUpdated.photos
+              ? carUpdated.photos
+              : [{ id: car.thumbnail, photo: car.thumbnail }]
+          }
+        />
       </S.CardImages>
 
       <S.Content>
@@ -108,20 +130,22 @@ function SchedulingDetail() {
             <S.Name>{car.name}</S.Name>
           </S.Description>
           <S.Rent>
-            <S.Period>{car.rent.period}</S.Period>
-            <S.Price>R$ {car.rent.price}</S.Price>
+            <S.Period>{car.period}</S.Period>
+            <S.Price>R$ {car.price}</S.Price>
           </S.Rent>
         </S.Details>
 
-        <S.Accessories>
-          {car.accessories.map(item => (
-            <Accessory
-              key={item.type}
-              name={item.name}
-              icon={getAccessoryIcon(item.type)}
-            />
-          ))}
-        </S.Accessories>
+        {carUpdated.accessories && (
+          <S.Accessories>
+            {carUpdated.accessories.map(item => (
+              <Accessory
+                key={item.type}
+                name={item.name}
+                icon={getAccessoryIcon(item.type)}
+              />
+            ))}
+          </S.Accessories>
+        )}
 
         <S.RentalPeriod>
           <S.CalendarIcon>
@@ -152,7 +176,7 @@ function SchedulingDetail() {
           <S.RentalPriceLabel>TOTAL</S.RentalPriceLabel>
           <S.RentalPriceDetails>
             <S.RentalPriceQuota>
-              R$ {car.rent.price} x{dates.length} diárias
+              R$ {car.price} x{dates.length} diárias
             </S.RentalPriceQuota>
             <S.RentalPriceTotal>R$ {rentTotal}</S.RentalPriceTotal>
           </S.RentalPriceDetails>
@@ -167,6 +191,11 @@ function SchedulingDetail() {
           enabled={!loading}
           loading={loading}
         />
+        {netInfo.isConnected && (
+          <S.OfflineInfo>
+            Conecte-se a internet para ver mais detalhes e agendar seu carro.
+          </S.OfflineInfo>
+        )}
       </S.Footer>
     </S.Container>
   );

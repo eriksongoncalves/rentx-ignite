@@ -174,3 +174,12 @@ export const RentalPriceTotal = styled.Text`
     color: ${theme.colors.success};
   `}
 `;
+
+export const OfflineInfo = styled.Text`
+  ${({ theme }) => css`
+    font-family: ${theme.fonts.family.inter.regular};
+    font-size: ${RFValue(10)}px;
+    color: ${theme.colors.main};
+    text-align: center;
+  `}
+`;
