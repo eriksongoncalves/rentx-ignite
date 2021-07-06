@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { StatusBar, Alert } from 'react-native';
-import { useNavigation } from '@react-navigation/native';
+import { useNavigation, useIsFocused } from '@react-navigation/native';
 import { AntDesign } from '@expo/vector-icons';
 import { format, parseISO } from 'date-fns';
 
@@ -18,6 +18,7 @@ export type DataProps = {
 
 function MyCars() {
   const navigation = useNavigation();
+  const screenIsFocus = useIsFocused();
   const [cars, setCars] = useState<DataProps[]>([]);
   const [loading, setLoading] = useState(true);
 
@@ -45,7 +46,7 @@ function MyCars() {
       .finally(() => {
         setLoading(false);
       });
-  }, []);
+  }, [screenIsFocus]);
 
   return (
     <S.Container>
