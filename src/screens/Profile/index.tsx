@@ -18,7 +18,7 @@ import { useAuth } from '../../hooks/auth';
 function Profile() {
   const theme = useTheme();
   const navigation = useNavigation();
-  const { user } = useAuth();
+  const { user, signOut } = useAuth();
 
   const [option, setOption] = useState<'dataEdit' | 'passwordEdit'>('dataEdit');
   const [name, setName] = useState('');
@@ -30,10 +30,6 @@ function Profile() {
   const [avatar, setAvatar] = useState(user.avatar);
 
   function handleBack() {
-    navigation.goBack();
-  }
-
-  function handleSignOut() {
     navigation.goBack();
   }
 
@@ -67,7 +63,7 @@ function Profile() {
             <S.HeaderTop>
               <BackButton color="light" onPress={handleBack} />
               <S.HeaderTitle>Editar Perfil</S.HeaderTitle>
-              <S.LogoutButton onPress={handleSignOut}>
+              <S.LogoutButton onPress={signOut}>
                 <Feather name="power" size={24} color={theme.colors.shape} />
               </S.LogoutButton>
             </S.HeaderTop>

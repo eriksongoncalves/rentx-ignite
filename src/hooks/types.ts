@@ -23,6 +23,7 @@ export type SignInCredentials = {
 export type AuthContextProps = {
   user: User;
   signIn(credentials: SignInCredentials): Promise<void>;
+  signOut(): Promise<void>;
 };
 
 export type AuthProviderProps = {
