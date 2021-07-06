@@ -2,7 +2,7 @@ import { FlatList } from 'react-native';
 import { getStatusBarHeight } from 'react-native-iphone-x-helper';
 import { RFValue } from 'react-native-responsive-fontsize';
 import styled, { css } from 'styled-components/native';
-import { CarProps } from '.';
+import { DataProps } from '.';
 
 export const Container = styled.View`
   ${({ theme }) => css`
@@ -71,9 +71,11 @@ export const AppointmentQuantity = styled.Text`
   `}
 `;
 
-export const CardList = styled(FlatList as new () => FlatList<CarProps>).attrs({
-  showsVerticalScrollIndicator: false
-})``;
+export const CardList = styled(FlatList as new () => FlatList<DataProps>).attrs(
+  {
+    showsVerticalScrollIndicator: false
+  }
+)``;
 
 export const CarWrapper = styled.View`
   margin-bottom: 16px;
